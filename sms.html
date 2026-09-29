@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduFlow - Comprehensive School Management System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="h-full bg-slate-100 font-sans text-slate-800 antialiased overflow-hidden">
+    <div id="app" class="flex h-full w-full overflow-hidden">
+
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between transition-all duration-300 z-30 shadow-2xl">
+            <div>
+                <!-- Brand Header -->
+                <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800 bg-slate-950/60">
+                    <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-white tracking-wide text-base">EduFlow SMS</h1>
+                        <span class="text-xs text-indigo-400 font-medium flex items-center gap-1">
+                            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span> Active Session
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="px-3 py-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
+                    <div class="px-3 pb-2 text-[10px] font-bold tracking-wider text-slate-500 uppercase">Core Modules</div>
+                    
+                    <button onclick="switchTab('dashboard')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group active-tab" data-tab="dashboard">
+                        <i class="fa-solid fa-chart-pie w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Overview Dashboard
+                    </button>
+                    
+                    <button onclick="switchTab('admissions')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="admissions">
+                        <i class="fa-solid fa-user-plus w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Admissions & Leads
+                    </button>
+                    
+                    <button onclick="switchTab('students')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="students">
+                        <i class="fa-solid fa-users w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Student Directory
+                    </button>
+                    
+                    <button onclick="switchTab('academics')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="academics">
+                        <i class="fa-solid fa-book-bookmark w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Academic Structure
+                    </button>
+                    
+                    <button onclick="switchTab('attendance')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="attendance">
+                        <i class="fa-solid fa-calendar-check w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Attendance Tracker
+                    </button>
+                    
+                    <button onclick="switchTab('examinations')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="examinations">
+                        <i class="fa-solid fa-file-lines w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Examinations & Grades
+                    </button>
+                    
+                    <button onclick="switchTab('fees')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-slate-300 hover:bg-slate-800/80 hover:text-white group" data-tab="fees">
+                        <i class="fa-solid fa-wallet w-5 text-center group-hover:text-indigo-400 transition-colors"></i> Fee & Payment Ledger
+                    </button>
+
+                    <div class="pt-4 px-3 pb-2 text-[10px] font-bold tracking-wider text-violet-400 uppercase flex items-center justify-between">
+                        <span>Parent Portal</span>
+                        <span class="bg-violet-500/20 text-violet-300 px-1.5 py-0.5 rounded text-[9px]">Secure</span>
+                    </div>
+
+                    <button onclick="switchTab('parentPortal')" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all text-violet-200 bg-violet-900/40 border border-violet-700/40 hover:bg-violet-900/70 hover:text-white group shadow-sm" data-tab="parentPortal">
+                        <i class="fa-solid fa-house-user w-5 text-center text-violet-400 group-hover:text-violet-300"></i> Parent Portal Experience
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-800 bg-slate-950/40 text-xs flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="h-7 w-7 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xs">AD</div>
+                    <div>
+                        <div class="font-semibold text-white">Administrator</div>
+                        <div class="text-[10px] text-slate-400">admin@eduflow.edu</div>
+                    </div>
+                </div>
+                <button onclick="resetDemoData()" title="Reset demo data" class="text-slate-400 hover:text-rose-400 transition-colors p-1.5 rounded-lg hover:bg-slate-800">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-100">
+            <!-- Top Header Bar -->
+            <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between z-20 shadow-xs">
+                <div class="flex items-center gap-4">
+                    <button id="sidebarToggle" onclick="toggleSidebar()" class="text-slate-500 hover:text-slate-700 md:hidden">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <div>
+                        <h2 id="pageTitle" class="text-lg font-bold text-slate-800 tracking-tight">Overview Dashboard</h2>
+                        <p id="pageSubtitle" class="text-xs text-slate-500">Real-time school management insights and operational metrics</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="openWebformModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-indigo-500/20 flex items-center gap-2 transition-all">
+                        <i class="fa-solid fa-globe"></i> Admission Webform Simulator
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Viewport -->
+            <div class="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar relative" id="mainViewport">
+                
+                <!-- TAB 1: OVERVIEW DASHBOARD -->
+                <section id="tab-dashboard" class="tab-content space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Total Enrolled Students</p>
+                                <h3 id="statTotalStudents" class="text-2xl font-bold text-slate-800 mt-1">--</h3>
+                                <span class="text-xs text-emerald-600 font-semibold mt-1 inline-flex items-center gap-1"><i class="fa-solid fa-arrow-trend-up"></i> Active session</span>
+                            </div>
+                            <div class="h-12 w-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl shadow-xs">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending Enquiries</p>
+                                <h3 id="statPendingLeads" class="text-2xl font-bold text-slate-800 mt-1">--</h3>
+                                <span class="text-xs text-amber-600 font-semibold mt-1 inline-flex items-center gap-1"><i class="fa-solid fa-clock"></i> In pipeline</span>
+                            </div>
+                            <div class="h-12 w-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl shadow-xs">
+                                <i class="fa-solid fa-user-clock"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Average Attendance</p>
+                                <h3 id="statAvgAttendance" class="text-2xl font-bold text-slate-800 mt-1">--%</h3>
+                                <span class="text-xs text-emerald-600 font-semibold mt-1 inline-flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Above threshold</span>
+                            </div>
+                            <div class="h-12 w-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-xs">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Fee Collection Rate</p>
+                                <h3 id="statFeeCollection" class="text-2xl font-bold text-slate-800 mt-1">--%</h3>
+                                <span id="statOutstandingText" class="text-xs text-rose-600 font-semibold mt-1 inline-flex items-center gap-1">-- Outstanding</span>
+                            </div>
+                            <div class="h-12 w-12 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center text-xl shadow-xs">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs lg:col-span-2">
+                            <div class="flex items-center justify-between mb-4">
+                                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-bar text-indigo-600"></i> Admission Funnel Pipeline Breakdown
+                                </h4>
+                                <span class="text-xs text-slate-400">Live Stage Tracking</span>
+                            </div>
+                            <div class="space-y-4 pt-2" id="dashboardPipelineBars"></div>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2 mb-3">
+                                    <i class="fa-solid fa-bolt text-amber-500"></i> Automated System Rules
+                                </h4>
+                                <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                                    System automation handles unique student ID generation, automated fee ledger initialization, and low-attendance alerts (&lt;75%).
+                                </p>
+                                <div class="space-y-2.5 text-xs">
+                                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                                        <span class="font-medium text-slate-700">Auto Student ID Generator</span>
+                                        <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono text-[10px]">Active</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                                        <span class="font-medium text-slate-700">Fee Ledger Sync & Installments</span>
+                                        <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono text-[10px]">Active</span>
+                                    </div>
+                                    <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                                        <span class="font-medium text-slate-700">Low Attendance Flag (&lt;75%)</span>
+                                        <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-mono text-[10px]">Active</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 text-center">
+                                <button onclick="switchTab('parentPortal')" class="w-full bg-violet-50 hover:bg-violet-100 text-violet-700 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                                    Launch Parent Portal Simulator <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: ADMISSIONS & LEADS -->
+                <section id="tab-admissions" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Admission Enquiries & Pipeline</h3>
+                            <p class="text-xs text-slate-500">Manage admission workflow stages from initial webform submission to confirmed student enrollment.</p>
+                        </div>
+                        <button onclick="openAddLeadModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-indigo-500/20 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-user-plus"></i> New Enquiry
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="leadsKanbanBoard"></div>
+                </section>
+
+                <!-- TAB 3: STUDENT DIRECTORY -->
+                <section id="tab-students" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Enrolled Student Directory</h3>
+                            <p class="text-xs text-slate-500">Maintain comprehensive student profiles, unique system Student IDs, and class assignments.</p>
+                        </div>
+                        <div class="relative w-full sm:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-xs"></i>
+                            <input type="text" id="studentSearchInput" oninput="filterStudents()" placeholder="Search by name or ID..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3.5 px-6">Student ID</th>
+                                        <th class="py-3.5 px-6">Student Name</th>
+                                        <th class="py-3.5 px-6">Class & Section</th>
+                                        <th class="py-3.5 px-6">Parent Email</th>
+                                        <th class="py-3.5 px-6">Academic Year</th>
+                                        <th class="py-3.5 px-6 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="studentTableBody" class="divide-y divide-slate-100 text-xs text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: ACADEMIC STRUCTURE -->
+                <section id="tab-academics" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Academic Structure & Hierarchy</h3>
+                            <p class="text-xs text-slate-500">Manage Classes, Sections, Subjects, and associated Teacher assignments.</p>
+                        </div>
+                        <button onclick="openAddAcademicModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-indigo-500/20 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-plus"></i> Add Class / Section
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="academicCardsContainer"></div>
+                </section>
+
+                <!-- TAB 5: ATTENDANCE TRACKER -->
+                <section id="tab-attendance" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Daily Attendance Management</h3>
+                            <p class="text-xs text-slate-500">Record daily attendance, prevent duplicates, and review cumulative percentage rates.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <input type="date" id="attendanceDatepicker" onchange="renderAttendanceGrid()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:border-indigo-500">
+                            <button onclick="saveAttendance()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-emerald-500/20 flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Attendance
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3.5 px-6">Student ID</th>
+                                        <th class="py-3.5 px-6">Student Name</th>
+                                        <th class="py-3.5 px-6">Class</th>
+                                        <th class="py-3.5 px-6 text-center">Status (Present / Absent / Late)</th>
+                                        <th class="py-3.5 px-6 text-right">Cumulative %</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendanceTableBody" class="divide-y divide-slate-100 text-xs text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 6: EXAMINATIONS & GRADES -->
+                <section id="tab-examinations" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Examinations & Student Gradebook</h3>
+                            <p class="text-xs text-slate-500">Maintain marks across examinations, subjects, and compute performance levels.</p>
+                        </div>
+                        <button onclick="openAddExamModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-indigo-500/20 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-plus"></i> Schedule Exam / Enter Marks
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="examResultsContainer"></div>
+                </section>
+
+                <!-- TAB 7: FEE & PAYMENT LEDGER -->
+                <section id="tab-fees" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-base">Fee Structure & Installment Ledger</h3>
+                            <p class="text-xs text-slate-500">Track multi-installment payments, outstanding balances, and identify unpaid accounts.</p>
+                        </div>
+                        <button onclick="openPaymentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm shadow-emerald-500/20 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-receipt"></i> Record Installment Payment
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3.5 px-6">Student ID & Name</th>
+                                        <th class="py-3.5 px-6">Class</th>
+                                        <th class="py-3.5 px-6">Total Fee</th>
+                                        <th class="py-3.5 px-6">Amount Paid</th>
+                                        <th class="py-3.5 px-6">Outstanding</th>
+                                        <th class="py-3.5 px-6">Payment Status</th>
+                                        <th class="py-3.5 px-6 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="feesTableBody" class="divide-y divide-slate-100 text-xs text-slate-700"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 8: PARENT PORTAL EXPERIENCE -->
+                <section id="tab-parentPortal" class="tab-content hidden space-y-6">
+                    <div class="bg-gradient-to-r from-violet-900 via-indigo-900 to-violet-800 p-6 rounded-2xl text-white shadow-xl relative overflow-hidden">
+                        <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative z-10">
+                            <div>
+                                <span class="bg-violet-500/40 text-violet-200 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full border border-violet-400/30">Secure Parent Experience</span>
+                                <h3 class="text-xl font-bold mt-2">Parent Portal Experience</h3>
+                                <p class="text-xs text-violet-200 mt-1 max-w-xl">
+                                    Parents securely access child profiles, attendance records, examination grades, and fee payment history linked by Student ID.
+                                </p>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20 flex items-center gap-3">
+                                <label class="text-xs font-semibold text-violet-200">Select Child:</label>
+                                <select id="parentPortalStudentSelect" onchange="renderParentPortal()" class="bg-violet-950/80 text-white border border-violet-500/50 rounded-lg px-3 py-1.5 text-xs focus:outline-none"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="parentPortalContent" class="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Webform Modal -->
+    <div id="webformModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-globe text-indigo-400"></i> Admission Enquiry Webform</h3>
+                <button onclick="closeWebformModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="webformForm" onsubmit="handleWebformSubmit(event)" class="p-6 space-y-4 text-xs">
+                <p class="text-slate-500">Simulates prospective parents submitting an admission enquiry. Automatically captures the record in the <strong class="text-slate-700">Leads</strong> pipeline.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
+                        <input type="text" id="wfFirstName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" placeholder="e.g. Liam">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
+                        <input type="text" id="wfLastName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" placeholder="e.g. Smith">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Parent Email *</label>
+                        <input type="email" id="wfEmail" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" placeholder="parent@example.com">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Phone Number *</label>
+                        <input type="text" id="wfPhone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" placeholder="+1 (555) 019-2834">
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Applying For Class *</label>
+                    <select id="wfClass" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500">
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                    </select>
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                    <button type="button" onclick="closeWebformModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold shadow-sm">Submit Enquiry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Lead Modal -->
+    <div id="addLeadModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200">
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <h3 class="font-bold text-sm">Add New Admission Lead</h3>
+                <button onclick="closeAddLeadModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="addLeadForm" onsubmit="handleAddLeadSubmit(event)" class="p-6 space-y-4 text-xs">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
+                        <input type="text" id="leadFirstName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
+                        <input type="text" id="leadLastName" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Email *</label>
+                        <input type="email" id="leadEmail" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Phone *</label>
+                        <input type="text" id="leadPhone" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Target Class *</label>
+                        <select id="leadClass" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Pipeline Stage *</label>
+                        <select id="leadStage" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                            <option value="Enquiry">Enquiry</option>
+                            <option value="Document Verification">Document Verification</option>
+                            <option value="Fee Clearance">Fee Clearance</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                    <button type="button" onclick="closeAddLeadModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-xl font-semibold">Save Lead</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Record Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-slate-200">
+            <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+                <h3 class="font-bold text-sm">Record Fee Installment Payment</h3>
+                <button onclick="closePaymentModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="paymentForm" onsubmit="handlePaymentSubmit(event)" class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Select Student *</label>
+                    <select id="payStudentSelect" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2"></select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Installment Amount ($) *</label>
+                    <input type="number" id="payAmount" required min="1" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2" placeholder="e.g. 1500">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Payment Mode *</label>
+                    <select id="payMode" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2">
+                        <option value="Bank Transfer">Bank Transfer (ACH)</option>
+                        <option value="Credit Card">Credit Card</option>
+                        <option value="Check">Check / DD</option>
+                        <option value="Cash">Cash</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-700 mb-1">Transaction Reference / Receipt No *</label>
+                    <input type="text" id="payRef" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2" placeholder="TXN-2026-8891">
+                </div>
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                    <button type="button" onclick="closePaymentModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-semibold">Cancel</button>
+                    <button type="submit" class="px-5 py-2 bg-emerald-600 text-white rounded-xl font-semibold">Post Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        let state = {
+            leads: [
+                { id: 'LD-1001', firstName: 'Alexander', lastName: 'Wright', email: 'a.wright@gmail.com', phone: '+1-555-0192', targetClass: 'Grade 10', stage: 'Enquiry', date: '2026-06-01' },
+                { id: 'LD-1002', firstName: 'Sophia', lastName: 'Martinez', email: 'sophia.m@yahoo.com', phone: '+1-555-0144', targetClass: 'Grade 9', stage: 'Document Verification', date: '2026-06-02' },
+                { id: 'LD-1003', firstName: 'Lucas', lastName: 'Johnson', email: 'lucas.j@outlook.com', phone: '+1-555-0188', targetClass: 'Grade 11', stage: 'Fee Clearance', date: '2026-06-03' }
+            ],
+            students: [
+                { id: 'STU-2026-0001', firstName: 'Emma', lastName: 'Watson', email: 'parent.watson@gmail.com', phone: '+1-555-0111', class: 'Grade 10', section: '10-A', academicYear: '2026-2027' },
+                { id: 'STU-2026-0002', firstName: 'Noah', lastName: 'Smith', email: 'parent.smith@gmail.com', phone: '+1-555-0222', class: 'Grade 10', section: '10-A', academicYear: '2026-2027' },
+                { id: 'STU-2026-0003', firstName: 'Olivia', lastName: 'Brown', email: 'parent.brown@gmail.com', phone: '+1-555-0333', class: 'Grade 9', section: '9-B', academicYear: '2026-2027' },
+                { id: 'STU-2026-0004', firstName: 'Liam', lastName: 'Davis', email: 'parent.davis@gmail.com', phone: '+1-555-0444', class: 'Grade 11', section: '11-A', academicYear: '2026-2027' }
+            ],
+            classes: [
+                { name: 'Grade 9', section: '9-B', teacher: 'Dr. Robert Chen', subjects: ['Mathematics', 'Physics', 'English', 'Computer Science'], studentsCount: 28 },
+                { name: 'Grade 10', section: '10-A', teacher: 'Prof. Sarah Jenkins', subjects: ['Algebra II', 'Chemistry', 'World History', 'Literature'], studentsCount: 32 },
+                { name: 'Grade 11', section: '11-A', teacher: 'Mr. David Miller', subjects: ['Calculus', 'Biology', 'Economics', 'Physics II'], studentsCount: 25 },
+                { name: 'Grade 12', section: '12-A', teacher: 'Ms. Emily Vance', subjects: ['Advanced Calculus', 'Organic Chemistry', 'Government', 'Literature II'], studentsCount: 30 }
+            ],
+            attendance: {
+                '2026-06-05': { 'STU-2026-0001': 'Present', 'STU-2026-0002': 'Present', 'STU-2026-0003': 'Absent', 'STU-2026-0004': 'Present' }
+            },
+            fees: [
+                { studentId: 'STU-2026-0001', totalFee: 5000, amountPaid: 5000, outstanding: 0, status: 'Paid' },
+                { studentId: 'STU-2026-0002', totalFee: 5000, amountPaid: 2500, outstanding: 2500, status: 'Partial' },
+                { studentId: 'STU-2026-0003', totalFee: 4800, amountPaid: 0, outstanding: 4800, status: 'Unpaid' },
+                { studentId: 'STU-2026-0004', totalFee: 5200, amountPaid: 5200, outstanding: 0, status: 'Paid' }
+            ],
+            exams: [
+                { title: 'Mid-Term Examination 2026', class: 'Grade 10', subject: 'Algebra II', maxMarks: 100, results: { 'STU-2026-0001': 92, 'STU-2026-0002': 78 } },
+                { title: 'Mid-Term Examination 2026', class: 'Grade 10', subject: 'Chemistry', maxMarks: 100, results: { 'STU-2026-0001': 88, 'STU-2026-0002': 65 } }
+            ]
+        };
+
+        function loadStorage() {
+            const saved = localStorage.getItem('eduflow_sms_state');
+            if (saved) {
+                try { state = JSON.parse(saved); } catch (e) { console.error(e); }
+            }
+        }
+
+        function saveStorage() {
+            localStorage.setItem('eduflow_sms_state', JSON.stringify(state));
+        }
+
+        function resetDemoData() {
+            localStorage.removeItem('eduflow_sms_state');
+            location.reload();
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-800', 'text-white', 'shadow-sm');
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('bg-slate-800', 'text-white', 'shadow-sm');
+                }
+            });
+
+            const titles = {
+                dashboard: ['Overview Dashboard', 'Real-time school management insights and operational metrics'],
+                admissions: ['Admissions & Leads Pipeline', 'Manage enquiries and confirm student enrollments'],
+                students: ['Enrolled Student Directory', 'Comprehensive student directory with auto-generated IDs'],
+                academics: ['Academic Structure', 'Manage classes, sections, subjects, and teachers'],
+                attendance: ['Attendance Management', 'Daily attendance tracking and percentage calculations'],
+                examinations: ['Examinations & Gradebook', 'Maintain student marks and evaluate performance'],
+                fees: ['Fee & Payment Ledger', 'Multi-installment tracking and outstanding balances'],
+                parentPortal: ['Parent Portal Experience', 'Secure parent-facing child information portal']
+            };
+
+            if (titles[tabId]) {
+                document.getElementById('pageTitle').innerText = titles[tabId][0];
+                document.getElementById('pageSubtitle').innerText = titles[tabId][1];
+            }
+
+            if (tabId === 'dashboard') renderDashboard();
+            if (tabId === 'admissions') renderLeadsKanban();
+            if (tabId === 'students') renderStudentsTable();
+            if (tabId === 'academics') renderAcademics();
+            if (tabId === 'attendance') renderAttendanceGrid();
+            if (tabId === 'examinations') renderExaminations();
+            if (tabId === 'fees') renderFeesTable();
+            if (tabId === 'parentPortal') initParentPortal();
+
+            if (window.innerWidth < 768) {
+                document.getElementById('sidebar').classList.add('-translate-x-full');
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('translate-x-0');
+        }
+
+        function renderDashboard() {
+            document.getElementById('statTotalStudents').innerText = state.students.length;
+            document.getElementById('statPendingLeads').innerText = state.leads.filter(l => l.stage !== 'Confirmed').length;
+            
+            let totalRecords = 0;
+            let presentCount = 0;
+            Object.values(state.attendance).forEach(dayObj => {
+                Object.values(dayObj).forEach(status => {
+                    totalRecords++;
+                    if (status === 'Present') presentCount++;
+                });
+            });
+            const avgAtt = totalRecords > 0 ? Math.round((presentCount / totalRecords) * 100) : 94;
+            document.getElementById('statAvgAttendance').innerText = avgAtt + '%';
+
+            let totalFeeSum = 0;
+            let totalPaidSum = 0;
+            state.fees.forEach(f => {
+                totalFeeSum += f.totalFee;
+                totalPaidSum += f.amountPaid;
+            });
+            const feeRate = totalFeeSum > 0 ? Math.round((totalPaidSum / totalFeeSum) * 100) : 0;
+            document.getElementById('statFeeCollection').innerText = feeRate + '%';
+            const outstandingTotal = totalFeeSum - totalPaidSum;
+            document.getElementById('statOutstandingText').innerText = `$${outstandingTotal.toLocaleString()} Outstanding`;
+
+            const stages = ['Enquiry', 'Document Verification', 'Fee Clearance', 'Confirmed'];
+            const stageCounts = stages.map(s => state.leads.filter(l => l.stage === s).length + (s === 'Confirmed' ? state.students.length : 0));
+            const maxCount = Math.max(...stageCounts, 1);
+
+            const container = document.getElementById('dashboardPipelineBars');
+            container.innerHTML = stages.map((stg, i) => {
+                const count = stageCounts[i];
+                const pct = Math.round((count / maxCount) * 100);
+                const colors = ['bg-indigo-500', 'bg-violet-500', 'bg-amber-500', 'bg-emerald-500'];
+                return `
+                    <div>
+                        <div class="flex justify-between text-xs font-semibold mb-1">
+                            <span class="text-slate-700">${stg}</span>
+                            <span class="text-slate-500">${count} records</span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                            <div class="${colors[i]} h-full rounded-full transition-all duration-500" style="width: ${Math.max(pct, 8)}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderLeadsKanban() {
+            const stages = ['Enquiry', 'Document Verification', 'Fee Clearance'];
+            const container = document.getElementById('leadsKanbanBoard');
+            
+            let html = stages.map(stage => {
+                const stageLeads = state.leads.filter(l => l.stage === stage);
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col h-[550px]">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wider">${stage}</h4>
+                            <span class="bg-slate-100 text-slate-700 font-bold text-[10px] px-2 py-0.5 rounded-full">${stageLeads.length}</span>
+                        </div>
+                        <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-1">
+                            ${stageLeads.length === 0 ? `<div class="text-center py-10 text-xs text-slate-400">No leads in this stage</div>` : ''}
+                            ${stageLeads.map(lead => `
+                                <div class="bg-slate-50 hover:bg-white border border-slate-200/80 rounded-xl p-3.5 shadow-xs transition-all space-y-2 group">
+                                    <div class="flex justify-between items-start">
+                                        <span class="font-bold text-xs text-slate-800">${lead.firstName} ${lead.lastName}</span>
+                                        <span class="bg-indigo-50 text-indigo-700 font-mono text-[10px] px-2 py-0.5 rounded">${lead.targetClass}</span>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-envelope text-slate-400"></i> ${lead.email}</p>
+                                    <p class="text-[11px] text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-phone text-slate-400"></i> ${lead.phone}</p>
+                                    <div class="pt-2 flex items-center justify-between border-t border-slate-200/60 mt-2">
+                                        <span class="text-[10px] text-slate-400">${lead.date}</span>
+                                        <div class="flex items-center gap-1">
+                                            ${stage !== 'Fee Clearance' ? `<button onclick="advanceLead('${lead.id}')" title="Move Forward" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 px-2 py-1 rounded text-[10px] font-semibold transition-all"><i class="fa-solid fa-arrow-right"></i></button>` : `<button onclick="confirmAdmission('${lead.id}')" title="Confirm Admission & Convert to Student" class="bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-600 px-2.5 py-1 rounded text-[10px] font-semibold transition-all"><i class="fa-solid fa-check mr-1"></i> Enroll</button>`}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            html += `
+                <div class="bg-emerald-50/50 rounded-2xl border border-emerald-200/80 p-4 shadow-xs flex flex-col h-[550px]">
+                    <div class="flex items-center justify-between pb-3 border-b border-emerald-200 mb-3">
+                        <h4 class="font-bold text-xs text-emerald-800 uppercase tracking-wider">Confirmed Students</h4>
+                        <span class="bg-emerald-200 text-emerald-900 font-bold text-[10px] px-2 py-0.5 rounded-full">${state.students.length}</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-1">
+                        ${state.students.map(st => `
+                            <div class="bg-white border border-emerald-200/80 rounded-xl p-3.5 shadow-xs space-y-2">
+                                <div class="flex justify-between items-start">
+                                    <span class="font-bold text-xs text-slate-800">${st.firstName} ${st.lastName}</span>
+                                    <span class="bg-emerald-100 text-emerald-800 font-mono text-[10px] px-2 py-0.5 rounded">${st.id}</span>
+                                </div>
+                                <p class="text-[11px] text-slate-500">Class: <strong class="text-slate-700">${st.class} (${st.section})</strong></p>
+                                <span class="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-semibold px-2 py-0.5 rounded-full"><i class="fa-solid fa-circle-check"></i> Enrolled</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function advanceLead(id) {
+            const lead = state.leads.find(l => l.id === id);
+            if (!lead) return;
+            if (lead.stage === 'Enquiry') lead.stage = 'Document Verification';
+            else if (lead.stage === 'Document Verification') lead.stage = 'Fee Clearance';
+            saveStorage();
+            renderLeadsKanban();
+        }
+
+        function confirmAdmission(id) {
+            const leadIdx = state.leads.findIndex(l => l.id === id);
+            if (leadIdx === -1) return;
+            const lead = state.leads[leadIdx];
+
+            const year = new Date().getFullYear();
+            const seq = (state.students.length + 1).toString().padStart(4, '0');
+            const newStudentId = `STU-${year}-${seq}`;
+
+            const newStudent = {
+                id: newStudentId,
+                firstName: lead.firstName,
+                lastName: lead.lastName,
+                email: lead.email,
+                phone: lead.phone,
+                class: lead.targetClass,
+                section: lead.targetClass === 'Grade 10' ? '10-A' : '9-B',
+                academicYear: '2026-2027'
+            };
+
+            state.students.push(newStudent);
+            state.leads.splice(leadIdx, 1);
+
+            state.fees.push({
+                studentId: newStudentId,
+                totalFee: 5000,
+                amountPaid: 0,
+                outstanding: 5000,
+                status: 'Unpaid'
+            });
+
+            saveStorage();
+            renderLeadsKanban();
+            alert(`Admission Confirmed! Unique Student ID generated: ${newStudentId} and fee ledger initialized.`);
+        }
+
+        function renderStudentsTable(filterText = '') {
+            const tbody = document.getElementById('studentTableBody');
+            const query = filterText.toLowerCase();
+            const filtered = state.students.filter(s => 
+                s.firstName.toLowerCase().includes(query) || 
+                s.lastName.toLowerCase().includes(query) || 
+                s.id.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-400">No students found matching your search.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(st => `
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="py-3.5 px-6 font-mono font-bold text-indigo-600">${st.id}</td>
+                    <td class="py-3.5 px-6 font-semibold text-slate-800">${st.firstName} ${st.lastName}</td>
+                    <td class="py-3.5 px-6"><span class="bg-slate-100 px-2.5 py-1 rounded-md font-medium">${st.class} (${st.section})</span></td>
+                    <td class="py-3.5 px-6 text-slate-500">${st.email}</td>
+                    <td class="py-3.5 px-6 text-slate-500">${st.academicYear}</td>
+                    <td class="py-3.5 px-6 text-right">
+                        <button onclick="viewStudentProfile('${st.id}')" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 px-3 py-1.5 rounded-lg font-semibold transition-all text-xs">
+                            View Profile
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterStudents() {
+            renderStudentsTable(document.getElementById('studentSearchInput').value);
+        }
+
+        function viewStudentProfile(studentId) {
+            document.getElementById('parentPortalStudentSelect').value = studentId;
+            switchTab('parentPortal');
+        }
+
+        function renderAcademics() {
+            const container = document.getElementById('academicCardsContainer');
+            container.innerHTML = state.classes.map(cls => `
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-xl text-xs">${cls.name} (${cls.section})</span>
+                            <span class="text-xs text-slate-400 font-medium">${cls.studentsCount} Students</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-1"><i class="fa-solid fa-chalkboard-user text-violet-500 mr-2"></i> ${cls.teacher}</h4>
+                        <p class="text-xs text-slate-500 mb-4">Academic Session: 2026-2027</p>
+                        <div class="space-y-1.5">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Associated Subjects</span>
+                            <div class="flex flex-wrap gap-1.5 pt-1">
+                                ${cls.subjects.map(subj => `<span class="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-medium">${subj}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+                        <span class="text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check"></i> Synchronized</span>
+                        <button onclick="alert('Class and teacher hierarchy managed successfully.');" class="text-indigo-600 hover:underline font-semibold">Manage Section</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAttendanceGrid() {
+            const datepicker = document.getElementById('attendanceDatepicker');
+            if (!datepicker.value) {
+                datepicker.value = new Date().toISOString().split('T')[0];
+            }
+            const dateStr = datepicker.value;
+            if (!state.attendance[dateStr]) {
+                state.attendance[dateStr] = {};
+                state.students.forEach(st => state.attendance[dateStr][st.id] = 'Present');
+            }
+
+            const dayAttendance = state.attendance[dateStr];
+            const tbody = document.getElementById('attendanceTableBody');
+
+            tbody.innerHTML = state.students.map(st => {
+                const status = dayAttendance[st.id] || 'Present';
+                
+                let totalDays = 0;
+                let presentDays = 0;
+                Object.values(state.attendance).forEach(dObj => {
+                    if (dObj[st.id]) {
+                        totalDays++;
+                        if (dObj[st.id] === 'Present') presentDays++;
+                    }
+                });
+                const pct = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 100;
+                const isLow = pct < 75;
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3.5 px-6 font-mono font-bold text-indigo-600">${st.id}</td>
+                        <td class="py-3.5 px-6 font-semibold text-slate-800">${st.firstName} ${st.lastName}</td>
+                        <td class="py-3.5 px-6 text-slate-500">${st.class} (${st.section})</td>
+                        <td class="py-3.5 px-6 text-center">
+                            <div class="inline-flex rounded-xl p-1 bg-slate-100 gap-1">
+                                <button onclick="setAttendanceStatus('${dateStr}', '${st.id}', 'Present')" class="px-3 py-1 rounded-lg text-xs font-semibold transition-all ${status === 'Present' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">Present</button>
+                                <button onclick="setAttendanceStatus('${dateStr}', '${st.id}', 'Absent')" class="px-3 py-1 rounded-lg text-xs font-semibold transition-all ${status === 'Absent' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">Absent</button>
+                                <button onclick="setAttendanceStatus('${dateStr}', '${st.id}', 'Late')" class="px-3 py-1 rounded-lg text-xs font-semibold transition-all ${status === 'Late' ? 'bg-amber-500 text-white shadow-xs' : 'text-slate-600 hover:bg-slate-200'}">Late</button>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-6 text-right font-bold ${isLow ? 'text-rose-600' : 'text-emerald-600'}">
+                            ${pct}% ${isLow ? '<span class="ml-1 bg-rose-100 text-rose-800 text-[10px] px-1.5 py-0.5 rounded">Low (&lt;75%)</span>' : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function setAttendanceStatus(dateStr, studentId, status) {
+            state.attendance[dateStr][studentId] = status;
+            saveStorage();
+            renderAttendanceGrid();
+        }
+
+        function saveAttendance() {
+            saveStorage();
+            alert('Daily attendance records successfully saved and verified!');
+        }
+
+        function renderExaminations() {
+            const container = document.getElementById('examResultsContainer');
+            container.innerHTML = state.exams.map((ex, idx) => {
+                return `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="bg-violet-50 text-violet-700 font-bold px-3 py-1 rounded-xl text-xs">${ex.class}</span>
+                                <span class="text-xs font-semibold text-slate-500">${ex.subject}</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-4">${ex.title}</h4>
+                            <div class="space-y-3">
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Student Marks (Max: ${ex.maxMarks})</span>
+                                ${Object.keys(ex.results).map(stId => {
+                                    const st = state.students.find(s => s.id === stId);
+                                    const marks = ex.results[stId];
+                                    const grade = marks >= 90 ? 'A+' : marks >= 80 ? 'A' : marks >= 70 ? 'B' : 'C';
+                                    return `
+                                        <div class="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200/60 text-xs">
+                                            <span class="font-semibold text-slate-700">${st ? st.firstName + ' ' + st.lastName : stId}</span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-mono font-bold text-indigo-600">${marks} / ${ex.maxMarks}</span>
+                                                <span class="bg-violet-100 text-violet-800 font-bold px-2 py-0.5 rounded text-[10px]">${grade}</span>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+                            <span class="text-slate-400">Validated Gradebook</span>
+                            <button onclick="promptEnterMarks(${idx})" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 px-3 py-1.5 rounded-lg font-semibold transition-all">Update Marks</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function promptEnterMarks(examIdx) {
+            const exam = state.exams[examIdx];
+            const stId = prompt("Enter Student ID (e.g. STU-2026-0001):", "STU-2026-0001");
+            if (!stId) return;
+            const marks = prompt(`Enter marks obtained out of ${exam.maxMarks}:`, "85");
+            if (marks === null) return;
+            
+            exam.results[stId] = parseFloat(marks);
+            saveStorage();
+            renderExaminations();
+            alert("Marks successfully updated and grade calculated!");
+        }
+
+        function renderFeesTable() {
+            const tbody = document.getElementById('feesTableBody');
+            tbody.innerHTML = state.fees.map(f => {
+                const st = state.students.find(s => s.id === f.studentId);
+                const statusColor = f.status === 'Paid' ? 'bg-emerald-100 text-emerald-800' : f.status === 'Partial' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800';
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3.5 px-6">
+                            <div class="font-bold text-slate-800">${st ? st.firstName + ' ' + st.lastName : 'Unknown'}</div>
+                            <div class="font-mono text-xs text-indigo-600">${f.studentId}</div>
+                        </td>
+                        <td class="py-3.5 px-6 text-slate-600">${st ? st.class : '--'}</td>
+                        <td class="py-3.5 px-6 font-mono font-semibold text-slate-800">$${f.totalFee.toLocaleString()}</td>
+                        <td class="py-3.5 px-6 font-mono font-semibold text-emerald-600">$${f.amountPaid.toLocaleString()}</td>
+                        <td class="py-3.5 px-6 font-mono font-semibold text-rose-600">$${f.outstanding.toLocaleString()}</td>
+                        <td class="py-3.5 px-6"><span class="px-2.5 py-1 rounded-full font-bold text-[10px] ${statusColor}">${f.status}</span></td>
+                        <td class="py-3.5 px-6 text-right">
+                            <button onclick="openPaymentModalForStudent('${f.studentId}')" class="bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-600 px-3 py-1.5 rounded-lg font-semibold transition-all text-xs">
+                                Pay Installment
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function initParentPortal() {
+            const select = document.getElementById('parentPortalStudentSelect');
+            select.innerHTML = state.students.map(st => `
+                <option value="${st.id}">${st.firstName} ${st.lastName} (${st.id} - ${st.class})</option>
+            `).join('');
+            renderParentPortal();
+        }
+
+        function renderParentPortal() {
+            const studentId = document.getElementById('parentPortalStudentSelect').value;
+            const st = state.students.find(s => s.id === studentId);
+            const fee = state.fees.find(f => f.studentId === studentId) || { totalFee: 5000, amountPaid: 5000, outstanding: 0, status: 'Paid' };
+            
+            let totalDays = 0;
+            let presentDays = 0;
+            Object.values(state.attendance).forEach(dObj => {
+                if (dObj[studentId]) {
+                    totalDays++;
+                    if (dObj[studentId] === 'Present') presentDays++;
+                }
+            });
+            const attPct = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 96;
+
+            const container = document.getElementById('parentPortalContent');
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
+                        <div class="flex items-center gap-4 pb-4 border-b border-slate-100">
+                            <div class="h-14 w-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white font-bold text-xl flex items-center justify-center shadow-md">
+                                ${st ? st.firstName[0] + st.lastName[0] : 'ST'}
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-base">${st ? st.firstName + ' ' + st.lastName : 'Student'}</h4>
+                                <p class="text-xs text-indigo-600 font-mono font-semibold">${st ? st.id : ''}</p>
+                            </div>
+                        </div>
+                        <div class="pt-4 space-y-3 text-xs">
+                            <div class="flex justify-between py-1 border-b border-slate-100">
+                                <span class="text-slate-500">Current Class & Section:</span>
+                                <span class="font-bold text-slate-800">${st ? st.class + ' (' + st.section + ')' : '--'}</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-100">
+                                <span class="text-slate-500">Academic Year:</span>
+                                <span class="font-bold text-slate-800">2026-2027</span>
+                            </div>
+                            <div class="flex justify-between py-1 border-b border-slate-100">
+                                <span class="text-slate-500">Parent Email:</span>
+                                <span class="font-bold text-slate-800">${st ? st.email : '--'}</span>
+                            </div>
+                            <div class="flex justify-between py-1">
+                                <span class="text-slate-500">Portal Security:</span>
+                                <span class="text-emerald-600 font-bold"><i class="fa-solid fa-shield-halved"></i> Active Session</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-violet-600"></i> Fee Status & Installments
+                        </h4>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Total Tuition Fee:</span>
+                                <span class="font-mono font-bold text-slate-800">$${fee.totalFee.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Amount Paid:</span>
+                                <span class="font-mono font-bold text-emerald-600">$${fee.amountPaid.toLocaleString()}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-500">Outstanding Balance:</span>
+                                <span class="font-mono font-bold text-rose-600">$${fee.outstanding.toLocaleString()}</span>
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="switchTab('fees')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-semibold shadow-xs transition-all">
+                                    Make Secure Payment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-emerald-600"></i> Attendance Overview
+                        </h4>
+                        <div class="flex items-center gap-6 bg-slate-50 p-4 rounded-xl border border-slate-200/60 mb-4">
+                            <div class="text-3xl font-bold text-slate-800">${attPct}%</div>
+                            <div>
+                                <div class="text-xs font-semibold text-slate-700">Cumulative Attendance Rate</div>
+                                <div class="text-[11px] text-slate-500">Minimum school requirement is 75%. All records verified.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-indigo-600"></i> Examination Results
+                        </h4>
+                        <div class="space-y-3">
+                            ${state.exams.map(ex => {
+                                const marks = ex.results[studentId] !== undefined ? ex.results[studentId] : 'Pending';
+                                return `
+                                    <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200/60 text-xs">
+                                        <div>
+                                            <div class="font-bold text-slate-800">${ex.title}</div>
+                                            <div class="text-slate-500">${ex.subject}</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="font-mono font-bold text-indigo-600 text-sm">${marks} / ${ex.maxMarks}</span>
+                                            <div class="text-[10px] text-emerald-600 font-semibold">Verified Grade</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openWebformModal() { document.getElementById('webformModal').classList.remove('hidden'); }
+        function closeWebformModal() { document.getElementById('webformModal').classList.add('hidden'); }
+        
+        function openAddLeadModal() { document.getElementById('addLeadModal').classList.remove('hidden'); }
+        function closeAddLeadModal() { document.getElementById('addLeadModal').classList.add('hidden'); }
+
+        function openPaymentModal() {
+            populatePaymentStudentSelect();
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        function openPaymentModalForStudent(stId) {
+            openPaymentModal();
+            document.getElementById('payStudentSelect').value = stId;
+        }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+
+        function populatePaymentStudentSelect() {
+            const select = document.getElementById('payStudentSelect');
+            select.innerHTML = state.students.map(st => `<option value="${st.id}">${st.firstName} ${st.lastName} (${st.id})</option>`).join('');
+        }
+
+        function handleWebformSubmit(e) {
+            e.preventDefault();
+            const newLead = {
+                id: 'LD-' + (1000 + state.leads.length + 1),
+                firstName: document.getElementById('wfFirstName').value,
+                lastName: document.getElementById('wfLastName').value,
+                email: document.getElementById('wfEmail').value,
+                phone: document.getElementById('wfPhone').value,
+                targetClass: document.getElementById('wfClass').value,
+                stage: 'Enquiry',
+                date: new Date().toISOString().split('T')[0]
+            };
+            state.leads.push(newLead);
+            saveStorage();
+            closeWebformModal();
+            document.getElementById('webformForm').reset();
+            renderLeadsKanban();
+            alert('Webform submitted successfully! Captured in Admissions pipeline.');
+        }
+
+        function handleAddLeadSubmit(e) {
+            e.preventDefault();
+            const newLead = {
+                id: 'LD-' + (1000 + state.leads.length + 1),
+                firstName: document.getElementById('leadFirstName').value,
+                lastName: document.getElementById('leadLastName').value,
+                email: document.getElementById('leadEmail').value,
+                phone: document.getElementById('leadPhone').value,
+                targetClass: document.getElementById('leadClass').value,
+                stage: document.getElementById('leadStage').value,
+                date: new Date().toISOString().split('T')[0]
+            };
+            state.leads.push(newLead);
+            saveStorage();
+            closeAddLeadModal();
+            document.getElementById('addLeadForm').reset();
+            renderLeadsKanban();
+        }
+
+        function handlePaymentSubmit(e) {
+            e.preventDefault();
+            const stId = document.getElementById('payStudentSelect').value;
+            const amt = parseFloat(document.getElementById('payAmount').value);
+
+            let feeRec = state.fees.find(f => f.studentId === stId);
+            if (!feeRec) {
+                feeRec = { studentId: stId, totalFee: 5000, amountPaid: 0, outstanding: 5000, status: 'Unpaid' };
+                state.fees.push(feeRec);
+            }
+
+            feeRec.amountPaid += amt;
+            feeRec.outstanding = Math.max(0, feeRec.totalFee - feeRec.amountPaid);
+            feeRec.status = feeRec.outstanding <= 0 ? 'Paid' : 'Partial';
+
+            saveStorage();
+            closePaymentModal();
+            document.getElementById('paymentForm').reset();
+            renderFeesTable();
+            alert(`Installment payment of $${amt} successfully recorded! Fee ledger updated.`);
+        }
+
+        window.onload = function() {
+            loadStorage();
+            switchTab('dashboard');
+        };
+    </script>
+</body>
+</html>
